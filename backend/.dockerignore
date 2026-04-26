@@ -1,0 +1,7 @@
+.env
+.env.*
+.vscode/
+bin/
+tmp/
+vendor/
+*.log

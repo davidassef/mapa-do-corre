@@ -1,0 +1,25 @@
+name: mapa-do-corre-vps
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: mapa-do-corre-backend:latest
+    container_name: mapa-do-corre-backend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${API_HOST_PORT:-18081}:8080"
+    env_file:
+      - backend/.env
+    environment:
+      APP_ENV: production
+      PORT: 8080
+      PERSISTENCE_MODE: postgres
+    networks:
+      - shared-db
+
+networks:
+  shared-db:
+    external: true
+    name: ${SHARED_DOCKER_NETWORK:-shared-db-network}
