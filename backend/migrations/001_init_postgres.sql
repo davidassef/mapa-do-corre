@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS postgis;
-
 CREATE TABLE IF NOT EXISTS prestadores (
     id UUID PRIMARY KEY,
     nome VARCHAR(120) NOT NULL,
@@ -7,7 +5,8 @@ CREATE TABLE IF NOT EXISTS prestadores (
     descricao TEXT NOT NULL DEFAULT '',
     whatsapp VARCHAR(20) NOT NULL,
     bairro VARCHAR(120) NOT NULL DEFAULT '',
-    localizacao GEOGRAPHY(POINT, 4326) NOT NULL,
+    latitude DOUBLE PRECISION NOT NULL,
+    longitude DOUBLE PRECISION NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -20,5 +19,5 @@ CREATE TABLE IF NOT EXISTS logs_cliques (
 );
 
 CREATE INDEX IF NOT EXISTS idx_prestadores_categoria ON prestadores (categoria);
-CREATE INDEX IF NOT EXISTS idx_prestadores_localizacao ON prestadores USING GIST (localizacao);
+CREATE INDEX IF NOT EXISTS idx_prestadores_coordenadas ON prestadores (latitude, longitude);
 CREATE INDEX IF NOT EXISTS idx_logs_cliques_prestador_id ON logs_cliques (prestador_id);

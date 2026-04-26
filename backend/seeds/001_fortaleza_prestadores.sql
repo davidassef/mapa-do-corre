@@ -15,7 +15,8 @@ INSERT INTO prestadores (
     descricao,
     whatsapp,
     bairro,
-    localizacao
+    latitude,
+    longitude
 )
 VALUES
     (
@@ -25,7 +26,8 @@ VALUES
         'Marmitas caseiras no almoco com entrega em Benfica, Damas e Parquelandia.',
         '5585988112233',
         'Benfica',
-        ST_SetSRID(ST_MakePoint(-38.536936, -3.743269), 4326)::geography
+        -3.743269,
+        -38.536936
     ),
     (
         'e13c7a55-c6fd-40d9-8da7-6a8081e7a102',
@@ -34,7 +36,8 @@ VALUES
         'Atendimento residencial para vazamento, troca de torneira e revisao de caixa acoplada.',
         '5585988223344',
         'Montese',
-        ST_SetSRID(ST_MakePoint(-38.545087, -3.767527), 4326)::geography
+        -3.767527,
+        -38.545087
     ),
     (
         '32d349ab-10ab-4b6f-92f6-343b30370d03',
@@ -43,7 +46,8 @@ VALUES
         'Ajuste de roupa, barra, conserto de ziper e pequenas reformas sob medida.',
         '5585988334455',
         'Parquelandia',
-        ST_SetSRID(ST_MakePoint(-38.559191, -3.744760), 4326)::geography
+        -3.744760,
+        -38.559191
     ),
     (
         'c6d38b28-9658-44ee-8717-fd2bb7cc7e04',
@@ -52,7 +56,8 @@ VALUES
         'Entregas rapidas para pequenos volumes entre Centro, Jacarecanga e Benfica.',
         '5585988445566',
         'Centro',
-        ST_SetSRID(ST_MakePoint(-38.526670, -3.727493), 4326)::geography
+        -3.727493,
+        -38.526670
     ),
     (
         '31f2ef8d-e6d8-45bc-a78b-f6c40c978005',
@@ -61,7 +66,8 @@ VALUES
         'Faxina residencial por diaria com agenda flexivel na regiao oeste de Fortaleza.',
         '5585988556677',
         'Farias Brito',
-        ST_SetSRID(ST_MakePoint(-38.548907, -3.734215), 4326)::geography
+        -3.734215,
+        -38.548907
     )
 ON CONFLICT (id) DO UPDATE
 SET
@@ -70,5 +76,6 @@ SET
     descricao = EXCLUDED.descricao,
     whatsapp = EXCLUDED.whatsapp,
     bairro = EXCLUDED.bairro,
-    localizacao = EXCLUDED.localizacao,
+    latitude = EXCLUDED.latitude,
+    longitude = EXCLUDED.longitude,
     updated_at = NOW();

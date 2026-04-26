@@ -2,7 +2,7 @@ name: mapa-do-corre-local
 
 services:
   postgres:
-    image: postgis/postgis:16-3.4
+    image: postgres:16-alpine
     container_name: mapa-do-corre-postgres
     restart: unless-stopped
     environment:

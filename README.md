@@ -10,13 +10,13 @@ Mapa do Corre e uma plataforma de impacto social para dar visibilidade a microem
 - Remocao do corre sem login, tambem validada por codigo enviado ao e-mail responsavel.
 - Contato por WhatsApp com registro de clique.
 - Dashboard de impacto com conexoes, prestadores ativos, corres removidos e recorte por categoria.
-- Backend preparado para PostgreSQL/PostGIS, rate limit, CORS e SMTP real.
+- Backend preparado para PostgreSQL compartilhado, rate limit, CORS e SMTP real.
 - Deploy de frontend na Vercel e backend em VPS com Docker Compose.
 
 ## Stack
 
 - Backend: Go 1.25 + Fiber
-- Banco: PostgreSQL 16 + PostGIS 3.4
+- Banco: PostgreSQL 16
 - Frontend: React 18 + Vite + TypeScript + Tailwind CSS v3
 - Mapa: Leaflet + OpenStreetMap
 - Estado local: Zustand
@@ -52,7 +52,7 @@ cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env
 ```
 
-2. Suba o PostGIS local:
+2. Suba o PostgreSQL local:
 
 ```bash
 docker compose up -d
@@ -61,7 +61,7 @@ docker compose up -d
 3. Aplique as migrations:
 
 ```bash
-docker exec -i mapa-do-corre-postgres psql -U postgres -d mapa_do_corre < backend/migrations/001_init_postgis.sql
+docker exec -i mapa-do-corre-postgres psql -U postgres -d mapa_do_corre < backend/migrations/001_init_postgres.sql
 docker exec -i mapa-do-corre-postgres psql -U postgres -d mapa_do_corre < backend/migrations/002_email_verificacao.sql
 ```
 
@@ -203,7 +203,7 @@ Retorna conexoes historicas, prestadores ativos, prestadores removidos e metrica
 
 O schema fica versionado em `backend/migrations`:
 
-- `001_init_postgis.sql`: extensao PostGIS, prestadores, logs de clique e indices.
+- `001_init_postgres.sql`: prestadores, logs de clique, coordenadas e indices.
 - `002_email_verificacao.sql`: e-mail responsavel, remocao logica e solicitacoes de codigo.
 
 O seed local fica em `backend/seeds/001_fortaleza_prestadores.sql` e cria 5 prestadores de demonstracao em Fortaleza.

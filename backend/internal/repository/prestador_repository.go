@@ -46,7 +46,8 @@ func (repository *PrestadorRepository) CriarSolicitacaoCadastro(ctx context.Cont
 			whatsapp,
 			bairro,
 			email,
-			localizacao,
+			latitude,
+			longitude,
 			codigo_hash,
 			expira_em
 		)
@@ -58,7 +59,8 @@ func (repository *PrestadorRepository) CriarSolicitacaoCadastro(ctx context.Cont
 			$5,
 			$6,
 			$7,
-			ST_SetSRID(ST_MakePoint($8, $9), 4326)::geography,
+			$8,
+			$9,
 			$10,
 			$11
 		)
@@ -75,8 +77,8 @@ func (repository *PrestadorRepository) CriarSolicitacaoCadastro(ctx context.Cont
 		input.WhatsApp,
 		input.Bairro,
 		input.Email,
-		input.Longitude,
 		input.Latitude,
+		input.Longitude,
 		codigoHash,
 		expiraEm,
 	); err != nil {
@@ -107,8 +109,8 @@ func (repository *PrestadorRepository) ConfirmarCadastro(ctx context.Context, in
 			whatsapp,
 			bairro,
 			email,
-			ST_Y(localizacao::geometry) AS latitude,
-			ST_X(localizacao::geometry) AS longitude,
+			latitude,
+			longitude,
 			codigo_hash,
 			expira_em,
 			confirmado_em,
@@ -193,7 +195,8 @@ func (repository *PrestadorRepository) ConfirmarCadastro(ctx context.Context, in
 			whatsapp,
 			bairro,
 			email_responsavel,
-			localizacao
+			latitude,
+			longitude
 		)
 		VALUES (
 			$1,
@@ -203,7 +206,8 @@ func (repository *PrestadorRepository) ConfirmarCadastro(ctx context.Context, in
 			$5,
 			$6,
 			$7,
-			ST_SetSRID(ST_MakePoint($8, $9), 4326)::geography
+			$8,
+			$9
 		)
 		RETURNING
 			id::text,
@@ -212,8 +216,8 @@ func (repository *PrestadorRepository) ConfirmarCadastro(ctx context.Context, in
 			descricao,
 			whatsapp,
 			bairro,
-			ST_Y(localizacao::geometry) AS latitude,
-			ST_X(localizacao::geometry) AS longitude
+			latitude,
+			longitude
 	`
 
 	prestadorID := uuid.NewString()
@@ -228,8 +232,8 @@ func (repository *PrestadorRepository) ConfirmarCadastro(ctx context.Context, in
 		solicitacao.WhatsApp,
 		solicitacao.Bairro,
 		solicitacao.Email,
-		solicitacao.Longitude,
 		solicitacao.Latitude,
+		solicitacao.Longitude,
 	).Scan(
 		&prestador.ID,
 		&prestador.Nome,

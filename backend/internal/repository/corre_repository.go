@@ -18,20 +18,50 @@ func NewCorreRepository(sqlDB *sql.DB) *CorreRepository {
 
 func (repository *CorreRepository) BuscarProximos(ctx context.Context, filtro models.FiltroBuscaCorre) ([]models.PrestadorResumo, error) {
 	const query = `
+		WITH candidatos AS (
+			SELECT
+				id::text,
+				nome,
+				categoria,
+				descricao,
+				whatsapp,
+				bairro,
+				latitude,
+				longitude,
+				POWER(SIN(RADIANS(latitude - $2) / 2), 2) +
+					COS(RADIANS($2)) * COS(RADIANS(latitude)) * POWER(SIN(RADIANS(longitude - $1) / 2), 2) AS haversine_a
+			FROM prestadores
+			WHERE removido_em IS NULL
+			  AND ($4 = '' OR categoria = $4)
+			  AND latitude BETWEEN $2 - ($3 / 111320.0) AND $2 + ($3 / 111320.0)
+			  AND longitude BETWEEN $1 - ($3 / (111320.0 * GREATEST(COS(RADIANS($2)), 0.01)))
+				  AND $1 + ($3 / (111320.0 * GREATEST(COS(RADIANS($2)), 0.01)))
+		),
+		distancias AS (
+			SELECT
+				id,
+				nome,
+				categoria,
+				descricao,
+				whatsapp,
+				bairro,
+				latitude,
+				longitude,
+				CAST(6371000 * 2 * ASIN(SQRT(LEAST(1, haversine_a))) AS INTEGER) AS distancia_metros
+			FROM candidatos
+		)
 		SELECT
-			id::text,
+			id,
 			nome,
 			categoria,
 			descricao,
 			whatsapp,
 			bairro,
-			ST_Y(localizacao::geometry) AS latitude,
-			ST_X(localizacao::geometry) AS longitude,
-			CAST(ST_Distance(localizacao, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography) AS INTEGER) AS distancia_metros
-		FROM prestadores
-		WHERE removido_em IS NULL
-		  AND ST_DWithin(localizacao, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography, $3)
-		  AND ($4 = '' OR categoria = $4)
+			latitude,
+			longitude,
+			distancia_metros
+		FROM distancias
+		WHERE distancia_metros <= $3
 		ORDER BY distancia_metros ASC
 	`
 
