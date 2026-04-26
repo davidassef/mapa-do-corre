@@ -31,8 +31,8 @@ export function CategoriaFilter({ categorias, categoriaAtiva, onChange }: Catego
 
 function montarClasseBotao(isAtivo: boolean) {
   if (isAtivo) {
-    return 'rounded-full border border-coqueiro bg-coqueiro px-4 py-2 text-sm font-semibold text-white transition';
+    return 'rounded-md border border-coqueiro bg-coqueiro px-3 py-2 text-sm font-semibold text-white transition';
   }
 
-  return 'rounded-full border border-coqueiro/30 bg-white px-4 py-2 text-sm font-semibold text-noite transition hover:border-coqueiro hover:text-coqueiro';
+  return 'rounded-md border border-coqueiro/25 bg-white px-3 py-2 text-sm font-semibold text-noite transition hover:border-coqueiro hover:text-coqueiro';
 }

@@ -134,15 +134,15 @@ export function CadastroPage({ onAbrirMapa }: CadastroPageProps) {
   }
 
   return (
-    <section className="grid gap-6 xl:grid-cols-[1.05fr_1fr]">
-      <div className="rounded-[2rem] border border-white/70 bg-white/90 p-6 shadow-mapa backdrop-blur">
+    <section className="grid gap-5 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] xl:items-start">
+      <div className="rounded-lg border border-noite/10 bg-white p-5 shadow-sm">
         <div className="space-y-2">
-          <span className="inline-flex rounded-full bg-mar/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-coqueiro">
+          <span className="inline-flex rounded-full bg-mar/15 px-3 py-1 text-xs font-semibold uppercase text-coqueiro">
             Cadastro aberto
           </span>
-          <h2 className="font-display text-3xl text-noite">Publique seu corre em menos de um minuto</h2>
+          <h2 className="font-display text-2xl text-noite md:text-3xl">Publique seu corre</h2>
           <p className="text-sm leading-6 text-noite/70">
-            O fluxo continua sem cadastro, mas agora exige um codigo enviado por e-mail antes de publicar. O ponto no mapa vira a referencia usada na busca por raio.
+            Informe os dados principais, confirme o e-mail e marque o ponto de atendimento no mapa.
           </p>
         </div>
 
@@ -160,7 +160,7 @@ export function CadastroPage({ onAbrirMapa }: CadastroPageProps) {
               <select
                 value={formulario.categoria}
                 onChange={(event) => atualizarCampo('categoria', event.target.value)}
-                className="w-full rounded-2xl border border-coqueiro/20 bg-areia px-4 py-3 outline-none focus:border-coqueiro"
+                className="w-full rounded-md border border-coqueiro/20 bg-[#f8f5ef] px-3 py-3 outline-none focus:border-coqueiro"
               >
                 {categoriaOptions.map((categoria) => (
                   <option key={categoria} value={categoria}>
@@ -202,7 +202,7 @@ export function CadastroPage({ onAbrirMapa }: CadastroPageProps) {
               value={formulario.descricao}
               onChange={(event) => atualizarCampo('descricao', event.target.value)}
               disabled={isFluxoCodigoAtivo || isSubmitting || isConfirmando}
-              className="min-h-28 w-full rounded-2xl border border-coqueiro/20 bg-areia px-4 py-3 outline-none focus:border-coqueiro disabled:cursor-not-allowed disabled:opacity-70"
+              className="min-h-28 w-full rounded-md border border-coqueiro/20 bg-[#f8f5ef] px-3 py-3 outline-none focus:border-coqueiro disabled:cursor-not-allowed disabled:opacity-70"
               placeholder="Diga o que voce resolve e em que horario atende."
             />
           </label>
@@ -227,13 +227,13 @@ export function CadastroPage({ onAbrirMapa }: CadastroPageProps) {
           </div>
 
           {solicitacaoAtiva ? (
-            <div className="rounded-[1.5rem] border border-coqueiro/15 bg-areia p-4 text-sm text-noite/75">
+            <div className="rounded-lg border border-coqueiro/15 bg-[#f8f5ef] p-4 text-sm text-noite/75">
               <p>
                 Codigo solicitado para <strong>{formulario.email}</strong>.
               </p>
               <p className="mt-2">Validade ate {formatarExpiracao(solicitacaoAtiva.expiraEm)}.</p>
               {solicitacaoAtiva.debugCodigo ? (
-                <p className="mt-3 rounded-2xl bg-noite px-4 py-3 font-semibold tracking-[0.18em] text-white">
+                <p className="mt-3 rounded-md bg-noite px-4 py-3 font-semibold text-white">
                   Codigo local: {solicitacaoAtiva.debugCodigo}
                 </p>
               ) : null}
@@ -244,7 +244,7 @@ export function CadastroPage({ onAbrirMapa }: CadastroPageProps) {
             <button
               type="button"
               onClick={onAbrirMapa}
-              className="rounded-full border border-coqueiro bg-white px-5 py-3 text-sm font-semibold text-coqueiro transition hover:bg-coqueiro hover:text-white"
+              className="rounded-md border border-coqueiro bg-white px-4 py-3 text-sm font-semibold text-coqueiro transition hover:bg-coqueiro hover:text-white"
             >
               Ver {ultimoPrestadorCadastrado} no mapa
             </button>
@@ -254,7 +254,7 @@ export function CadastroPage({ onAbrirMapa }: CadastroPageProps) {
             <button
               type="submit"
               disabled={isSubmitting || isConfirmando}
-              className="rounded-full bg-coral px-5 py-3 text-sm font-semibold text-white transition hover:bg-sol disabled:cursor-not-allowed disabled:opacity-70"
+              className="rounded-md bg-coral px-4 py-3 text-sm font-semibold text-white transition hover:bg-sol disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isSubmitting ? 'Enviando codigo...' : 'Enviar codigo por e-mail'}
             </button>
@@ -275,7 +275,7 @@ export function CadastroPage({ onAbrirMapa }: CadastroPageProps) {
               <button
                 type="submit"
                 disabled={isConfirmando}
-                className="rounded-full bg-coqueiro px-5 py-3 text-sm font-semibold text-white transition hover:bg-mar disabled:cursor-not-allowed disabled:opacity-70"
+                className="rounded-md bg-coqueiro px-4 py-3 text-sm font-semibold text-white transition hover:bg-mar disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {isConfirmando ? 'Confirmando...' : 'Confirmar publicacao'}
               </button>
@@ -283,7 +283,7 @@ export function CadastroPage({ onAbrirMapa }: CadastroPageProps) {
               <button
                 type="button"
                 onClick={handleEditarDados}
-                className="rounded-full border border-coqueiro bg-white px-5 py-3 text-sm font-semibold text-coqueiro transition hover:bg-coqueiro hover:text-white"
+                className="rounded-md border border-coqueiro bg-white px-4 py-3 text-sm font-semibold text-coqueiro transition hover:bg-coqueiro hover:text-white"
               >
                 Editar dados
               </button>
@@ -299,13 +299,19 @@ export function CadastroPage({ onAbrirMapa }: CadastroPageProps) {
           posicaoSelecionada={posicaoSelecionada}
           onSelecionarPosicao={handleSelecionarPosicao}
         />
-        <div className="rounded-[1.75rem] border border-white/70 bg-white/90 p-5 shadow-mapa backdrop-blur">
-          <h3 className="font-display text-xl text-noite">Como funciona</h3>
-          <p className="mt-3 text-sm leading-6 text-noite/70">
-            1. Clique no ponto onde voce atende com mais frequencia.
-          </p>
-          <p className="text-sm leading-6 text-noite/70">2. Preencha nome, categoria, WhatsApp e e-mail.</p>
-          <p className="text-sm leading-6 text-noite/70">3. Digite o codigo enviado e conclua a publicacao.</p>
+        <div className="rounded-lg border border-noite/10 bg-white p-5 shadow-sm">
+          <span className="text-xs font-semibold uppercase text-coqueiro/70">Ponto selecionado</span>
+          <h3 className="mt-2 font-display text-xl text-noite">Referencia de atendimento</h3>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-md bg-[#f8f5ef] px-3 py-3">
+              <span className="block text-xs font-semibold uppercase text-coqueiro/70">Latitude</span>
+              <strong className="mt-1 block text-sm text-noite">{formulario.latitude.toFixed(6)}</strong>
+            </div>
+            <div className="rounded-md bg-[#f8f5ef] px-3 py-3">
+              <span className="block text-xs font-semibold uppercase text-coqueiro/70">Longitude</span>
+              <strong className="mt-1 block text-sm text-noite">{formulario.longitude.toFixed(6)}</strong>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -331,7 +337,7 @@ function CampoTexto({ label, value, onChange, placeholder, type = 'text', disabl
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         disabled={disabled}
-        className="w-full rounded-2xl border border-coqueiro/20 bg-areia px-4 py-3 outline-none focus:border-coqueiro disabled:cursor-not-allowed disabled:opacity-70"
+        className="w-full rounded-md border border-coqueiro/20 bg-[#f8f5ef] px-3 py-3 outline-none focus:border-coqueiro disabled:cursor-not-allowed disabled:opacity-70"
       />
     </label>
   );
@@ -353,14 +359,14 @@ function formatarExpiracao(expiraEm: string) {
 
 function montarClasseStatus(tom: StatusCadastro['tom']) {
   if (tom === 'success') {
-    return 'rounded-[1.5rem] border border-coqueiro/20 bg-coqueiro/10 p-4 text-sm text-coqueiro';
+    return 'rounded-md border border-coqueiro/20 bg-coqueiro/10 p-4 text-sm text-coqueiro';
   }
 
   if (tom === 'error') {
-    return 'rounded-[1.5rem] border border-coral/20 bg-coral/10 p-4 text-sm text-coral';
+    return 'rounded-md border border-coral/20 bg-coral/10 p-4 text-sm text-coral';
   }
 
-  return 'rounded-[1.5rem] border border-coqueiro/10 bg-areia p-4 text-sm text-noite/70';
+  return 'rounded-md border border-coqueiro/10 bg-[#f8f5ef] p-4 text-sm text-noite/70';
 }
 
 function extrairMensagemErro(error: unknown) {

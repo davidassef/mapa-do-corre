@@ -18,12 +18,12 @@ export function CorreMap({
   onSelecionarPosicao,
 }: CorreMapProps) {
   return (
-    <div className="overflow-hidden rounded-[2rem] border border-white/60 bg-white shadow-mapa">
+    <div className="overflow-hidden rounded-lg border border-noite/10 bg-white shadow-sm">
       <MapContainer
         center={[centro.latitude, centro.longitude]}
         zoom={14}
         scrollWheelZoom
-        className="h-[420px] w-full"
+        className="h-[380px] w-full md:h-[440px] xl:h-[500px]"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -48,7 +48,7 @@ export function CorreMap({
             <Popup>
               <div className="space-y-2 text-sm text-noite">
                 <strong className="block text-base">{prestador.nome}</strong>
-                <span className="block capitalize text-coqueiro">{prestador.categoria}</span>
+                <span className="block text-coqueiro">{prestador.categoria}</span>
                 <p>{prestador.descricao}</p>
                 <span className="block">{prestador.bairro}</span>
               </div>

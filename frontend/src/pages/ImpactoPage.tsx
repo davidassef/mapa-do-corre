@@ -29,27 +29,27 @@ export function ImpactoPage() {
 
   if (!resumo) {
     return (
-      <section className="rounded-[2rem] border border-white/70 bg-white/90 p-6 shadow-mapa backdrop-blur">
+      <section className="rounded-lg border border-noite/10 bg-white p-5 shadow-sm">
         Carregando indicadores de impacto...
       </section>
     );
   }
 
   return (
-    <section className="space-y-6">
-      <div className="rounded-[2rem] border border-white/70 bg-white/90 p-6 shadow-mapa backdrop-blur">
+    <section className="space-y-5">
+      <div className="rounded-lg border border-noite/10 bg-white p-5 shadow-sm">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <span className="inline-flex rounded-full bg-coral/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-coral">
+            <span className="inline-flex rounded-full bg-coral/15 px-3 py-1 text-xs font-semibold uppercase text-coral">
               Dashboard de impacto
             </span>
-            <h2 className="mt-3 font-display text-3xl text-noite">Conexoes geradas pela rede local</h2>
+            <h2 className="mt-3 font-display text-2xl text-noite md:text-3xl">Conexoes geradas pela rede local</h2>
             <p className="mt-2 text-sm leading-6 text-noite/70">
               Este painel resume o volume de contatos disparados a partir do app e serve de base para o relatorio de extensao.
             </p>
           </div>
 
-          <div className="rounded-[1.5rem] bg-areia px-4 py-3 text-sm text-noite/70">
+          <div className="rounded-md bg-[#f8f5ef] px-4 py-3 text-sm text-noite/70">
             Fonte atual: {origemDados === 'api' ? 'API' : 'fallback local'}
           </div>
         </div>
@@ -64,15 +64,15 @@ export function ImpactoPage() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         {resumo.categorias.map((categoria) => (
-          <article key={categoria.categoria} className="rounded-[1.75rem] border border-white/70 bg-white/90 p-5 shadow-mapa backdrop-blur">
+          <article key={categoria.categoria} className="rounded-lg border border-noite/10 bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-coqueiro/70">Categoria</span>
+                <span className="text-xs font-semibold uppercase text-coqueiro/70">Categoria</span>
                 <h3 className="mt-2 font-display text-2xl capitalize text-noite">{categoria.categoria}</h3>
               </div>
 
-              <div className="rounded-2xl bg-mar/10 px-4 py-3 text-right">
-                <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-coqueiro/70">Cliques</span>
+              <div className="rounded-md bg-mar/10 px-4 py-3 text-right">
+                <span className="block text-xs font-semibold uppercase text-coqueiro/70">Cliques</span>
                 <strong className="font-display text-2xl text-coqueiro">{formatadorNumero.format(categoria.totalCliques)}</strong>
               </div>
             </div>
@@ -95,9 +95,9 @@ type ImpactoCardProps = {
 
 function ImpactoCard({ titulo, valor, detalhe }: ImpactoCardProps) {
   return (
-    <article className="rounded-[1.75rem] border border-white/70 bg-white/90 p-5 shadow-mapa backdrop-blur">
-      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-coqueiro/70">{titulo}</span>
-      <strong className="mt-3 block font-display text-4xl text-noite">{valor}</strong>
+    <article className="rounded-lg border border-noite/10 bg-white p-5 shadow-sm">
+      <span className="text-xs font-semibold uppercase text-coqueiro/70">{titulo}</span>
+      <strong className="mt-3 block font-display text-3xl text-noite">{valor}</strong>
       <p className="mt-2 text-sm text-noite/70">{detalhe}</p>
     </article>
   );

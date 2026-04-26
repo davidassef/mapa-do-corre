@@ -55,36 +55,36 @@ export function MapaPage() {
   }
 
   return (
-    <section className="grid gap-6 xl:grid-cols-[1.4fr_0.9fr]">
-      <div className="space-y-5">
-        <div className="rounded-[2rem] border border-white/70 bg-white/90 p-6 shadow-mapa backdrop-blur">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div className="space-y-2">
-              <span className="inline-flex rounded-full bg-sol/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-coral">
-                Descoberta por proximidade
+    <section className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(340px,0.8fr)] lg:items-start">
+      <div className="space-y-4">
+        <div className="rounded-lg border border-noite/10 bg-white p-5 shadow-sm">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-2xl">
+              <span className="inline-flex rounded-full bg-coral/10 px-3 py-1 text-xs font-semibold uppercase text-coral">
+                Mapa
               </span>
-              <h2 className="font-display text-3xl text-noite">Encontre quem resolve perto de voce</h2>
-              <p className="max-w-2xl text-sm leading-6 text-noite/70">
-                O mapa usa a sua localizacao atual ou um centro padrao em Fortaleza para listar corres dentro do raio definido.
+              <h2 className="mt-3 font-display text-2xl text-noite md:text-3xl">Corres perto de voce</h2>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-noite/70">
+                Fortaleza e entorno, com raio ajustavel e contato direto pelo WhatsApp.
               </p>
             </div>
 
             <button
               type="button"
               onClick={() => void usarLocalizacaoAtual()}
-              className="rounded-full bg-coqueiro px-5 py-3 text-sm font-semibold text-white transition hover:bg-mar"
+              className="w-full rounded-md bg-coqueiro px-4 py-3 text-sm font-semibold text-white transition hover:bg-mar sm:w-auto sm:whitespace-nowrap"
             >
               {isLocalizando ? 'Buscando localizacao...' : 'Usar minha localizacao'}
             </button>
           </div>
 
-          <div className="mt-5 grid gap-4 md:grid-cols-[220px_1fr]">
+          <div className="mt-5 grid gap-4 lg:grid-cols-[190px_minmax(0,1fr)]">
             <label className="space-y-2 text-sm font-medium text-noite">
               Raio de busca
               <select
                 value={raioMetros}
                 onChange={(event) => atualizarRaio(Number(event.target.value))}
-                className="w-full rounded-2xl border border-coqueiro/20 bg-areia px-4 py-3 text-noite outline-none focus:border-coqueiro"
+                className="w-full rounded-md border border-coqueiro/20 bg-[#f8f5ef] px-3 py-3 text-noite outline-none transition focus:border-coqueiro"
               >
                 <option value={1000}>1 km</option>
                 <option value={2500}>2.5 km</option>
@@ -103,33 +103,40 @@ export function MapaPage() {
             </div>
           </div>
 
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
+          <div className="mt-5 grid gap-3 md:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
             <Indicador titulo="Centro da busca" valor="Fortaleza" detalhe={descreverPermissao(statusPermissao)} />
-            <Indicador titulo="Prestadores visiveis" valor={String(corresFiltrados.length)} detalhe={origemDados === 'fallback' ? 'modo offline' : 'dados da API'} />
-            <Indicador titulo="Raio atual" valor={`${formatadorDistancia.format(raioMetros)} m`} detalhe="sem novo fetch para categoria" />
+            <Indicador titulo="Corres visiveis" valor={String(corresFiltrados.length)} detalhe={origemDados === 'fallback' ? 'modo offline' : 'prestadores no recorte'} />
+            <Indicador titulo="Raio atual" valor={`${formatadorDistancia.format(raioMetros)} m`} detalhe="alcance selecionado" />
           </div>
         </div>
 
         <CorreMap centro={centroAtual} raioMetros={raioMetros} prestadores={corresFiltrados} />
       </div>
 
-      <div className="space-y-4">
-        <div className="rounded-[2rem] border border-white/70 bg-white/90 p-6 shadow-mapa backdrop-blur">
-          <h3 className="font-display text-2xl text-noite">Lista de corres</h3>
-          <p className="mt-2 text-sm leading-6 text-noite/70">
-            O filtro de categoria acontece no estado local para evitar nova ida ao backend quando so a categoria mudar.
-          </p>
+      <aside className="space-y-3">
+        <div className="rounded-lg border border-noite/10 bg-white p-5 shadow-sm">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <span className="text-xs font-semibold uppercase text-coqueiro/70">Resultado</span>
+              <h3 className="mt-2 font-display text-2xl text-noite">Lista de corres</h3>
+            </div>
+            <strong className="rounded-md bg-coqueiro px-3 py-2 font-display text-xl text-white">
+              {corresFiltrados.length}
+            </strong>
+          </div>
         </div>
 
-        {isLoading ? <CardAviso mensagem="Carregando corres proximos..." /> : null}
-        {errorMessage ? <CardAviso mensagem={errorMessage} tom="erro" /> : null}
+        <div className="space-y-3">
+          {isLoading ? <CardAviso mensagem="Carregando corres proximos..." /> : null}
+          {errorMessage ? <CardAviso mensagem={errorMessage} tom="erro" /> : null}
 
-        {corresFiltrados.map((prestador) => (
-          <PrestadorCard key={prestador.id} prestador={prestador} onContato={registrarContato} onRemocaoConcluida={recarregarMapa} />
-        ))}
+          {corresFiltrados.map((prestador) => (
+            <PrestadorCard key={prestador.id} prestador={prestador} onContato={registrarContato} onRemocaoConcluida={recarregarMapa} />
+          ))}
 
-        {!isLoading && corresFiltrados.length === 0 ? <CardAviso mensagem="Nenhum corre encontrado para este recorte." /> : null}
-      </div>
+          {!isLoading && corresFiltrados.length === 0 ? <CardAviso mensagem="Nenhum corre encontrado para este recorte." /> : null}
+        </div>
+      </aside>
     </section>
   );
 }
@@ -142,10 +149,10 @@ type IndicadorProps = {
 
 function Indicador({ titulo, valor, detalhe }: IndicadorProps) {
   return (
-    <div className="rounded-[1.5rem] border border-coqueiro/10 bg-areia p-4">
-      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-coqueiro/70">{titulo}</span>
-      <strong className="mt-2 block font-display text-2xl text-noite">{valor}</strong>
-      <p className="mt-2 text-sm text-noite/65">{detalhe}</p>
+    <div className="rounded-lg border border-coqueiro/10 bg-[#f8f5ef] px-4 py-3">
+      <span className="text-xs font-semibold uppercase text-coqueiro/70">{titulo}</span>
+      <strong className="mt-1 block font-display text-xl text-noite">{valor}</strong>
+      <p className="mt-1 text-sm text-noite/65">{detalhe}</p>
     </div>
   );
 }
@@ -157,8 +164,8 @@ type CardAvisoProps = {
 
 function CardAviso({ mensagem, tom = 'neutro' }: CardAvisoProps) {
   const classes = tom === 'erro'
-    ? 'rounded-[1.75rem] border border-coral/20 bg-coral/10 p-5 text-sm text-coral'
-    : 'rounded-[1.75rem] border border-white/70 bg-white/90 p-5 text-sm text-noite/70 shadow-mapa';
+    ? 'rounded-lg border border-coral/20 bg-coral/10 p-4 text-sm text-coral'
+    : 'rounded-lg border border-noite/10 bg-white p-4 text-sm text-noite/70 shadow-sm';
 
   return <div className={classes}>{mensagem}</div>;
 }
@@ -248,33 +255,33 @@ function PrestadorCard({ prestador, onContato, onRemocaoConcluida }: PrestadorCa
   }
 
   return (
-    <article className="rounded-[1.75rem] border border-white/70 bg-white/90 p-5 shadow-mapa backdrop-blur">
+    <article className="rounded-lg border border-noite/10 bg-white p-4 shadow-sm">
       <div className="flex items-start justify-between gap-4">
-        <div>
-          <span className="inline-flex rounded-full bg-mar/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-coqueiro">
+        <div className="min-w-0">
+          <span className="inline-flex rounded-full bg-mar/15 px-3 py-1 text-xs font-semibold uppercase text-coqueiro">
             {prestador.categoria}
           </span>
-          <h4 className="mt-3 font-display text-xl text-noite">{prestador.nome}</h4>
+          <h4 className="mt-3 font-display text-lg text-noite">{prestador.nome}</h4>
           <p className="mt-2 text-sm leading-6 text-noite/70">{prestador.descricao}</p>
         </div>
 
-        <div className="rounded-2xl bg-areia px-3 py-2 text-right text-xs font-semibold text-noite/70">
+        <div className="w-24 shrink-0 rounded-md bg-[#f8f5ef] px-3 py-2 text-right text-xs font-semibold text-noite/70">
           <span className="block">Distancia</span>
-          <strong className="font-display text-lg text-noite">{formatadorDistancia.format(prestador.distanciaMetros)} m</strong>
+          <strong className="block whitespace-nowrap font-display text-base text-noite">{formatadorDistancia.format(prestador.distanciaMetros)} m</strong>
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-3 border-t border-coqueiro/10 pt-4">
+      <div className="mt-4 flex flex-col gap-3 border-t border-coqueiro/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-coqueiro/70">Bairro</span>
+          <span className="block text-xs font-semibold uppercase text-coqueiro/70">Bairro</span>
           <span className="text-sm text-noite">{prestador.bairro}</span>
         </div>
 
-        <div className="flex flex-wrap justify-end gap-2">
+        <div className="flex flex-wrap gap-2 sm:justify-end">
           <button
             type="button"
             onClick={() => setIsRemocaoAberta((estadoAtual) => !estadoAtual)}
-            className="rounded-full border border-coqueiro/20 bg-white px-4 py-2 text-sm font-semibold text-coqueiro transition hover:border-coqueiro hover:bg-coqueiro hover:text-white"
+            className="rounded-md border border-coqueiro/20 bg-white px-3 py-2 text-sm font-semibold text-coqueiro transition hover:border-coqueiro hover:bg-coqueiro hover:text-white"
           >
             {isRemocaoAberta ? 'Fechar remocao' : 'Solicitar remocao'}
           </button>
@@ -282,7 +289,7 @@ function PrestadorCard({ prestador, onContato, onRemocaoConcluida }: PrestadorCa
           <button
             type="button"
             onClick={() => void handleContato()}
-            className="rounded-full bg-coral px-4 py-2 text-sm font-semibold text-white transition hover:bg-sol"
+            className="rounded-md bg-coral px-3 py-2 text-sm font-semibold text-white transition hover:bg-sol"
           >
             Chamar no WhatsApp
           </button>
@@ -290,7 +297,7 @@ function PrestadorCard({ prestador, onContato, onRemocaoConcluida }: PrestadorCa
       </div>
 
       {isRemocaoAberta ? (
-        <div className="mt-4 rounded-[1.5rem] border border-coqueiro/10 bg-areia p-4">
+        <div className="mt-4 rounded-lg border border-coqueiro/10 bg-[#f8f5ef] p-4">
           <h5 className="font-display text-lg text-noite">Remover este corre</h5>
           <p className="mt-2 text-sm leading-6 text-noite/70">
             Use o mesmo e-mail informado no cadastro. Sem o codigo enviado para esse e-mail a remocao nao sera concluida.
@@ -308,14 +315,14 @@ function PrestadorCard({ prestador, onContato, onRemocaoConcluida }: PrestadorCa
                   onChange={(event) => setEmailRemocao(event.target.value)}
                   placeholder="voce@email.com"
                   disabled={isSolicitandoRemocao}
-                  className="w-full rounded-2xl border border-coqueiro/20 bg-white px-4 py-3 outline-none focus:border-coqueiro disabled:cursor-not-allowed disabled:opacity-70"
+                  className="w-full rounded-md border border-coqueiro/20 bg-white px-3 py-3 outline-none focus:border-coqueiro disabled:cursor-not-allowed disabled:opacity-70"
                 />
               </label>
 
               <button
                 type="submit"
                 disabled={isSolicitandoRemocao}
-                className="rounded-full bg-coqueiro px-5 py-3 text-sm font-semibold text-white transition hover:bg-mar disabled:cursor-not-allowed disabled:opacity-70"
+                className="rounded-md bg-coqueiro px-4 py-3 text-sm font-semibold text-white transition hover:bg-mar disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {isSolicitandoRemocao ? 'Enviando codigo...' : 'Enviar codigo de remocao'}
               </button>
@@ -325,7 +332,7 @@ function PrestadorCard({ prestador, onContato, onRemocaoConcluida }: PrestadorCa
               <p className="text-sm text-noite/70">Validade ate {formatarExpiracao(solicitacaoRemocao.expiraEm)}.</p>
 
               {solicitacaoRemocao.debugCodigo ? (
-                <p className="rounded-2xl bg-noite px-4 py-3 text-sm font-semibold tracking-[0.18em] text-white">
+                <p className="rounded-md bg-noite px-4 py-3 text-sm font-semibold text-white">
                   Codigo local: {solicitacaoRemocao.debugCodigo}
                 </p>
               ) : null}
@@ -337,7 +344,7 @@ function PrestadorCard({ prestador, onContato, onRemocaoConcluida }: PrestadorCa
                   onChange={(event) => setCodigoRemocao(event.target.value)}
                   placeholder="Digite os 6 digitos"
                   disabled={isConfirmandoRemocao}
-                  className="w-full rounded-2xl border border-coqueiro/20 bg-white px-4 py-3 outline-none focus:border-coqueiro disabled:cursor-not-allowed disabled:opacity-70"
+                  className="w-full rounded-md border border-coqueiro/20 bg-white px-3 py-3 outline-none focus:border-coqueiro disabled:cursor-not-allowed disabled:opacity-70"
                 />
               </label>
 
@@ -345,7 +352,7 @@ function PrestadorCard({ prestador, onContato, onRemocaoConcluida }: PrestadorCa
                 <button
                   type="submit"
                   disabled={isConfirmandoRemocao}
-                  className="rounded-full bg-coral px-5 py-3 text-sm font-semibold text-white transition hover:bg-sol disabled:cursor-not-allowed disabled:opacity-70"
+                  className="rounded-md bg-coral px-4 py-3 text-sm font-semibold text-white transition hover:bg-sol disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {isConfirmandoRemocao ? 'Confirmando...' : 'Confirmar remocao'}
                 </button>
@@ -353,7 +360,7 @@ function PrestadorCard({ prestador, onContato, onRemocaoConcluida }: PrestadorCa
                 <button
                   type="button"
                   onClick={handleResetarRemocao}
-                  className="rounded-full border border-coqueiro bg-white px-5 py-3 text-sm font-semibold text-coqueiro transition hover:bg-coqueiro hover:text-white"
+                  className="rounded-md border border-coqueiro bg-white px-4 py-3 text-sm font-semibold text-coqueiro transition hover:bg-coqueiro hover:text-white"
                 >
                   Trocar e-mail
                 </button>
@@ -368,14 +375,14 @@ function PrestadorCard({ prestador, onContato, onRemocaoConcluida }: PrestadorCa
 
 function montarClasseRemocao(tom: 'idle' | 'success' | 'error') {
   if (tom === 'success') {
-    return 'mt-4 rounded-[1.25rem] border border-coqueiro/20 bg-coqueiro/10 p-4 text-sm text-coqueiro';
+    return 'mt-4 rounded-md border border-coqueiro/20 bg-coqueiro/10 p-4 text-sm text-coqueiro';
   }
 
   if (tom === 'error') {
-    return 'mt-4 rounded-[1.25rem] border border-coral/20 bg-coral/10 p-4 text-sm text-coral';
+    return 'mt-4 rounded-md border border-coral/20 bg-coral/10 p-4 text-sm text-coral';
   }
 
-  return 'mt-4 rounded-[1.25rem] border border-coqueiro/10 bg-white p-4 text-sm text-noite/70';
+  return 'mt-4 rounded-md border border-coqueiro/10 bg-white p-4 text-sm text-noite/70';
 }
 
 function formatarExpiracao(expiraEm: string) {
